@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import {Route, Link} from 'react-router-dom';
+import {Link, Route} from 'react-router-dom';
 import * as BooksAPI from "./BooksAPI";
 import Book from "./Book"
-import BookChanger from "./BookChanger";
+import PropTypes from "prop-types";
 
 class SearchPage extends Component {
 
@@ -28,12 +28,6 @@ class SearchPage extends Component {
             this.setState({booksToShow: Array.from(books)});
         })
     };
-
-    moveBook(book, destination) {
-        if (BookChanger.validDestinations.includes(destination)) {
-            BooksAPI.update(book, destination);
-        }
-    }
 
     render() {
 
@@ -63,7 +57,7 @@ class SearchPage extends Component {
                     <div className="search-books-results">
                         <ol className="books-grid">
                             {this.state.booksToShow && this.state.booksToShow.length > 0 && this.state.booksToShow.map((book) => (
-                                <Book key={book.id} book={book} moveBook={this.moveBook}/>
+                                <Book key={book.id} book={book} moveBook={this.props.moveBook}/>
                                 )
                             )}
                         </ol>
@@ -75,3 +69,7 @@ class SearchPage extends Component {
 }
 
 export default SearchPage
+
+SearchPage.propTypes = {
+    moveBook: PropTypes.func.isRequired
+};

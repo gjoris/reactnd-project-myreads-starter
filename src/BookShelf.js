@@ -2,7 +2,7 @@ import React from "react";
 import * as BooksAPI from "./BooksAPI";
 import Book from "./Book";
 import {Link, Route} from "react-router-dom";
-import BookChanger from "./BookChanger";
+import PropTypes from "prop-types";
 
 class BookShelf extends React.Component {
 
@@ -10,7 +10,7 @@ class BookShelf extends React.Component {
         bookShelf: []
     };
 
-    componentWillReceiveProps = (prevProps) => {
+    componentWillReceiveProps = () => {
         this.retrieveAllBooks();
     };
 
@@ -19,13 +19,8 @@ class BookShelf extends React.Component {
     };
 
     moveBook = (book, destination) => {
-        if (BookChanger.validDestinations.includes(destination)) {
-            BooksAPI.update(book, destination)
-                .then(() => {
-                    this.retrieveAllBooks();
-                })
-        }
-    }
+        this.props.moveBook(book, destination).then(() => this.retrieveAllBooks());
+    };
 
     retrieveAllBooks = () => {
         BooksAPI.getAll().then((books) => {
@@ -109,3 +104,7 @@ class BookShelf extends React.Component {
 }
 
 export default BookShelf
+
+BookShelf.propTypes = {
+    moveBook: PropTypes.func.isRequired
+};
