@@ -2,7 +2,7 @@
 ## My-Reads: React Nanodegree Project 1
 
 
-This is the first project for the Udacity React Nanodegree programm.
+This is the first project for the Udacity React Nanodegree program.
 
 It consists of a bookshelf app, where you can move books around on your bookshelf; together with a search functionality, which is limited in search terms (see below). 
 
