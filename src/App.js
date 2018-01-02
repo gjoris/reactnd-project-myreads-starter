@@ -2,27 +2,43 @@ import React from 'react'
 import SearchPage from './SearchPage'
 import BookShelf from './BookShelf'
 import './App.css'
-import BookChanger from "./BookChanger";
 import * as BooksAPI from "./BooksAPI";
+import {Route} from "react-router-dom";
 
 class BooksApp extends React.Component {
 
+    state = {
+        bookShelf: [],
+        searchResult: []
+    };
+
+    componentDidMount = () => {
+        this.retrieveAllBooks();
+    };
+
     moveBook = (book, destination) => {
-        return new Promise((resolve, reject) => {
-            if (BookChanger.validDestinations.includes(destination)) {
-                BooksAPI.update(book, destination)
-                    .then((result) => resolve(result))
-                    .catch((error) => reject(error));
-            }
+        BooksAPI.update(book, destination).then(() => this.retrieveAllBooks());
+    };
+
+    retrieveAllBooks = () => {
+        BooksAPI.getAll().then((books) => {
+            this.setState({bookShelf: books});
         });
     };
 
     render() {
 
+        const {bookShelf} = this.state;
+
         return (
             <div className="app">
-                <SearchPage moveBook={this.moveBook}/>
-                <BookShelf moveBook={this.moveBook}/>
+                <Route exact path='/search' render={() => (
+                    <SearchPage books={bookShelf} moveBook={this.moveBook} searchBook={this.searchBook}/>
+                )}/>
+
+                <Route exact path='/' render={() => (
+                    <BookShelf books={bookShelf} moveBook={this.moveBook}/>
+                )}/>
             </div>
         )
     }
